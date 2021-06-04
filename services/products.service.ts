@@ -38,11 +38,13 @@ class ProductsService{
     public async createProduct( title: string, price: number ) {
         const productId: string = uuidv4();
 
-        return await this.DB.query(
+        const { rows: [ product ] } = await this.DB.query(
             `INSERT INTO ${ this.table }
                 ( id, title, price )
                     VALUES ( '${ productId }', '${ title }', ${ price }) RETURNING *`
-        )
+        );
+
+        return product;
     }
 }
 

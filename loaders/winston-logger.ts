@@ -28,6 +28,10 @@ class WinstonLogger implements LoggerInterface {
         this.logger.info( message );
     }
 
+    logDBRequest( message: string ){
+        this.logger.info( message );
+    }
+
     logError( message: string ){
         this.logger.error( message );
     }
