@@ -1,19 +1,11 @@
-<strong>For migrate database:</strong>
-<br/>
-<code>sequelize db:migrate</code> <br/>
+<h1>Step to start project</h1>
+<p>To build the Docker image:</p>
+<code>docker build . -t <your username>/cloudx</code>
 
-<strong>For undo migration you should:</strong>
-<br/>
-<code>sequelize db:migrate:undo</code>
+<p>Your image will now be listed by Docker:</p>
+<code>docker images</code>
 
-<br/>
+<p>Run the image:</p>
+<code>docker run -p 49160:8080 -d <your username>/node-web-app</code>
 
-<strong>For starting of the project, you should run: </strong>
-<br/>
-<code>npm install</code>
-<br/> 
-<code>npm tun start</code>
-
-<strong>For creating new migration file:</strong>
-<br/>
-<code>npx sequelize-cli migration:create --name [custom-name-of-migration]</code>
+<h2>Open link on localhost:49610</h2>
