@@ -1,19 +1,33 @@
-<strong>For migrate database:</strong>
-<br/>
-<code>sequelize db:migrate</code> <br/>
+<h1>CloudX-Shop</h1>
+<p>To run PostgreSQL locally:</p>
+<code>
+     docker run -it -e "POSTGRES_HOST_AUTH_METHOD=trust" -p 5432:5432 postgres
+</code>
 
-<strong>For undo migration you should:</strong>
-<br/>
-<code>sequelize db:migrate:undo</code>
+<p>In the ./config/dump.sql you can find mocked data</p>
 
-<br/>
+<p>To build Project's docker image put next command:</p>
+<code>
+    docker build . -t cloudx
+</code>
 
-<strong>For starting of the project, you should run: </strong>
-<br/>
-<code>npm install</code>
-<br/> 
-<code>npm tun start</code>
+<p>To run docker container:</p>
+<code>
+    docker run -p 8080:8080 -d cloudx
+</code>
 
-<strong>For creating new migration file:</strong>
-<br/>
-<code>npx sequelize-cli migration:create --name [custom-name-of-migration]</code>
+<p>To remove docker image:</p>
+<code>
+    docker rmi [ image-id ]
+</code>
+
+<p>To see te logs of docker image:</p>
+<code>
+    docker logs [ container id ]
+</code>>
+
+<p>To stop docker container:</p>
+<code>
+    docker stop [ container id ]
+</code>>
+

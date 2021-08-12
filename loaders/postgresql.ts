@@ -20,9 +20,6 @@ class PostgresDB implements DBInterface{
             database: PG_DATABASE,
             user: PG_USERNAME,
             password: PG_PASSWORD,
-            ssl: {
-                rejectUnauthorized: false
-            },
             connectionTimeoutMillis: 5000
         };
 
