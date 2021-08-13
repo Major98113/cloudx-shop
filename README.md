@@ -31,3 +31,17 @@
     docker stop [ container id ]
 </code>>
 
+<hr/>
+
+<p>To start app locally:</p>
+<code>
+     docker-compose up -d
+</code>>
+
+<p>To stop app locally:</p>
+<code>
+     docker-compose down --rmi all
+</code>>
+
+
+
