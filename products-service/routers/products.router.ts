@@ -3,6 +3,7 @@ import express from 'express';
 import { serviceContainer } from '../config/inversify.config';
 
 import { DB, DBInterface } from "../types/db.types";
+import { QueueInterface, QUEUE } from '../types/queue.types';
 
 import { ProductsService } from "../services/products.service";
 import { routerErrorLog } from "../utils/logger.helpers";
@@ -11,6 +12,7 @@ import { Product } from '../types/products.types';
 const router = express.Router();
 
 const ProductsServiceInstance = new ProductsService( serviceContainer.get<DBInterface>(DB) );
+const QueueInstance = serviceContainer.get<QueueInterface>(QUEUE);
 
 router.get('/', async ( req: express.Request, res: express.Response, next ) => {
     try {
@@ -33,6 +35,8 @@ router.get('/:id', async ( req: express.Request, res: express.Response, next ) =
     try {
         const { id } = req.params;
         const product: Product = await ProductsServiceInstance.getProductById(id);
+        
+        await QueueInstance.sendToQueue( `Requested product "${ product.title }" with id: ${ product.id } at ${ Date() }` );
 
         if( product )
             return res.status(200).json({ product });
@@ -52,6 +56,8 @@ router.post('/', async ( req: express.Request, res: express.Response, next ) => 
         const { title, price } = req.body;
         const product = await ProductsServiceInstance.createProduct( title, price );
 
+        await QueueInstance.sendToQueue( `Created product "${ product.title }" with id: ${ product.id } at ${ Date() }` );
+        
         if( product )
             return res.status(200).json({ product })
 

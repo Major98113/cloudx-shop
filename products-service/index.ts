@@ -2,16 +2,18 @@ import http from 'http';
 
 import { serviceContainer } from './config/inversify.config';
 import { DBInterface, DB } from "./types/db.types";
+import { QueueInterface, QUEUE } from './types/queue.types';
 import { LoggerInterface, Logger } from "./types/logger.types";
 import app from './routers';
 
-(async function main() {
+async function main() {
     try{
         const DBInstance = serviceContainer.get<DBInterface>(DB);
+        const QueueInstance = serviceContainer.get<QueueInterface>(QUEUE);
         const loggerInstance = serviceContainer.get<LoggerInterface>(Logger);
 
         await DBInstance.connect();
-        console.log("Successfully connected to db!");
+        await QueueInstance.connect();
 
         // @ts-ignore
         const { APP_PORT } = process.env;
@@ -36,4 +38,7 @@ import app from './routers';
     catch (error) {
         console.error(error);
     }
-}());
+}
+
+// @ts-ignore
+setTimeout( main, Number( process.env.START_TIMEOUT || 30000 ));

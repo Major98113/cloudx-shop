@@ -3,9 +3,10 @@ import { injectable } from 'inversify';
 import 'reflect-metadata';
 import { serviceContainer } from '../config/inversify.config';
 import { LoggerInterface, Logger } from '../types/logger.types';
+import { QueueInterface } from '../types/queue.types';
 
 @injectable()
-class RabbitMQ {
+class RabbitMQ implements QueueInterface {
     private readonly logger: LoggerInterface;
     private readonly amqpUrl: string;
     private readonly queue: string;
@@ -15,16 +16,17 @@ class RabbitMQ {
 
     constructor() {
         // @ts-ignore
-        this.amqpUrl = process.env.AMQP_URL || 'amqp://localhost:5673';
-        this.queue = process.env.QUEUE || 'productsQueue';
+        this.amqpUrl = process.env.AMQP_URL;
+        // @ts-ignore
+        this.queue = process.env.QUEUE;
         this.logger = serviceContainer.get<LoggerInterface>( Logger );
     }
 
     async connect() {
         try {
-            this.logger.logDBRequest("Start connecting to RabbitMQ");
+            this.logger.logDBRequest(`Start connecting to RabbitMQ: ${this.amqpUrl}`);
 
-            this.connection = await amqplib.connect( this.amqpUrl, 'heartbeat=60' );
+            this.connection = await amqplib.connect( this.amqpUrl );
             this.channel = await this.connection.createChannel();
             
             await this.channel.assertQueue( this.queue, { durable: true });
@@ -43,7 +45,7 @@ class RabbitMQ {
 
             await this.channel?.sendToQueue( this.queue, Buffer.from( message ) );
 
-            this.logger.logDBRequest("Connection to RabbitMQ successfully finished");
+            this.logger.logDBRequest("message successfully sent");
         }
         catch ( err ){
             this.logger.logError( err.message || "RabbitMQ sending message error" + JSON.stringify( err ) );
