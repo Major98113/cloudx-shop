@@ -20,7 +20,7 @@ services:
     healthcheck:
       test: [ "CMD", "nc", "-z", "localhost", "5672" ]
       interval: 5s
-      timeout: 15s
+      timeout: 30s
       retries: 1
   products-service:
     build:
@@ -34,6 +34,7 @@ services:
       PG_PASSWORD: 1234
       AMQP_URL: 'amqp://myuser:mypassword@rabbitmq:5672'
       QUEUE: 'productsQueue'
+      START_TIMEOUT: 15000
     restart: on-failure
     depends_on:
       - postgres
