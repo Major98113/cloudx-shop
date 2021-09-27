@@ -2,14 +2,26 @@ version: "2"
 services:
   postgres:
     image: postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 1234
     ports: 
       - '5432:5432'
-  cloudx:
+  rabbitmq:
+    image: rabbitmq:3.8-management-alpine
+    container_name: 'rabbitmq'
+    ports:
+        - 5673:5672
+        - 15673:15672
+    volumes: 
+      - rabbitmq:/var/lib/rabbitmq/nodejs-app
+    networks:
+        - rabbitmq_nodejs
+  products-service:
     build:
-      context: .
+      context: ./products-service
     environment:
       APP_PORT: 8080
       PG_DATABASE: postgres
@@ -21,3 +33,11 @@ services:
       - postgres
     ports:
       - '8080:8080'
+volumes:
+  db-data:
+    external: true
+  rabbitmq:
+    driver: local
+networks:
+  rabbitmq_nodejs:
+    driver: bridge

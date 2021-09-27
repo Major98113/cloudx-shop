@@ -13,7 +13,7 @@ class PostgresDB implements DBInterface{
 
     constructor() {
         // @ts-ignore
-        const { PG_HOST, PG_PORT, PG_DATABASE, PG_USERNAME, PG_PASSWORD } = config().parsed;
+        const { PG_HOST, PG_PORT, PG_DATABASE, PG_USERNAME, PG_PASSWORD } = process.env;
         const dbOptions = {
             host: PG_HOST,
             port: Number( PG_PORT ),
