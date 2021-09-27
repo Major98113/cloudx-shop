@@ -3,9 +3,10 @@ import { injectable } from 'inversify';
 import 'reflect-metadata';
 import { serviceContainer } from '../config/inversify.config';
 import { LoggerInterface, Logger } from '../types/logger.types';
+import { QueueInterface } from '../types/queue.types';
 
 @injectable()
-class RabbitMQ {
+class RabbitMQ implements QueueInterface {
     private readonly logger: LoggerInterface;
     private readonly amqpUrl: string;
     private readonly queue: string;
