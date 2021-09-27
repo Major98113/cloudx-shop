@@ -1,5 +1,4 @@
 import http from 'http';
-import { config } from 'dotenv';
 
 import { serviceContainer } from './config/inversify.config';
 import { DBInterface, DB } from "./types/db.types";
@@ -15,7 +14,7 @@ import app from './routers';
         console.log("Successfully connected to db!");
 
         // @ts-ignore
-        const { APP_PORT } = config().parsed;
+        const { APP_PORT } = process.env;
         const server = http.createServer(app);
 
         server.listen(APP_PORT, function () {

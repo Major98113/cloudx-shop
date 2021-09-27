@@ -1,7 +1,6 @@
 import {Client} from 'pg';
 import { injectable } from 'inversify';
 import 'reflect-metadata';
-import { config } from 'dotenv';
 import { serviceContainer } from '../config/inversify.config';
 import { LoggerInterface, Logger } from '../types/logger.types';
 import { DBInterface } from '../types/db.types';
@@ -13,7 +12,7 @@ class PostgresDB implements DBInterface{
 
     constructor() {
         // @ts-ignore
-        const { PG_HOST, PG_PORT, PG_DATABASE, PG_USERNAME, PG_PASSWORD } = config().parsed;
+        const { PG_HOST, PG_PORT, PG_DATABASE, PG_USERNAME, PG_PASSWORD } = process.env;
         const dbOptions = {
             host: PG_HOST,
             port: Number( PG_PORT ),
