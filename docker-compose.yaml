@@ -1,4 +1,4 @@
-version: "2"
+version: "3"
 services:
   postgres:
     image: postgres
@@ -11,14 +11,17 @@ services:
       - '5432:5432'
   rabbitmq:
     image: rabbitmq:3.8-management-alpine
-    container_name: 'rabbitmq'
+    environment:
+        - RABBITMQ_DEFAULT_USER=myuser
+        - RABBITMQ_DEFAULT_PASS=mypassword
     ports:
-        - 5673:5672
-        - 15673:15672
-    volumes: 
-      - rabbitmq:/var/lib/rabbitmq/nodejs-app
-    networks:
-        - rabbitmq_nodejs
+      - '5672:5672'
+      - '15672:15672'
+    healthcheck:
+      test: [ "CMD", "nc", "-z", "localhost", "5672" ]
+      interval: 5s
+      timeout: 15s
+      retries: 1
   products-service:
     build:
       context: ./products-service
@@ -29,15 +32,14 @@ services:
       PG_PORT: 5432
       PG_USERNAME: postgres
       PG_PASSWORD: 1234
+      AMQP_URL: 'amqp://myuser:mypassword@rabbitmq:5672'
+      QUEUE: 'productsQueue'
+    restart: on-failure
     depends_on:
       - postgres
+      - rabbitmq
     ports:
       - '8080:8080'
 volumes:
   db-data:
     external: true
-  rabbitmq:
-    driver: local
-networks:
-  rabbitmq_nodejs:
-    driver: bridge
