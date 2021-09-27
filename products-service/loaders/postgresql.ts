@@ -1,7 +1,6 @@
 import {Client} from 'pg';
 import { injectable } from 'inversify';
 import 'reflect-metadata';
-import { config } from 'dotenv';
 import { serviceContainer } from '../config/inversify.config';
 import { LoggerInterface, Logger } from '../types/logger.types';
 import { DBInterface } from '../types/db.types';

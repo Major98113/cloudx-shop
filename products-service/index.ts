@@ -1,5 +1,4 @@
 import http from 'http';
-import { config } from 'dotenv';
 
 import { serviceContainer } from './config/inversify.config';
 import { DBInterface, DB } from "./types/db.types";
